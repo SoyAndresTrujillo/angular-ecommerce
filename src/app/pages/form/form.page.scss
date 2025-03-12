@@ -1,0 +1,52 @@
+/* Base Ant Design inspired styling */
+.ant-design {
+  font-family: "Roboto", sans-serif;
+  background-color: #fff;
+}
+
+/* Each input container gets clear spacing */
+.custom-input-item {
+  margin-bottom: 16px;
+}
+
+/* Labels: clear, slightly bold and dark for high contrast */
+.custom-label {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 8px;
+}
+
+/* Inputs and datetime: minimalist design with subtle border and rounded corners */
+.custom-input,
+.custom-datetime {
+  --background: #fff;
+  --border-radius: 4px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --min-height: 32px;
+  font-size: 14px;
+  border: 1px solid #d9d9d9;
+}
+
+/* Remove default inner border for better control over the design */
+.custom-input::part(native),
+.custom-datetime::part(native) {
+  border: none;
+  background: transparent;
+}
+
+/* Focus state to indicate interactivity */
+.custom-input:focus,
+.custom-datetime:focus {
+  border-color: #1890ff;
+}
+
+/* Button styled to follow Ant Design’s primary button guidelines */
+.custom-button {
+  margin-top: 20px;
+  background-color: #1890ff;
+  color: #fff;
+  --border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+}

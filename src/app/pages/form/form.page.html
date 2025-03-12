@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Form Page</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ant-design">
+  <form (ngSubmit)="printData()">
+    <ion-item class="custom-input-item">
+      <ion-label position="stacked" class="custom-label">Name</ion-label>
+      <ion-input type="text" placeholder="Enter Name" [(ngModel)]="formData.name" name="name" required
+        class="custom-input"></ion-input>
+    </ion-item>
+
+    <ion-item class="custom-input-item">
+      <ion-label position="stacked" class="custom-label">Last Name</ion-label>
+      <ion-input type="text" placeholder="Enter Last Name" [(ngModel)]="formData.lastName" name="lastName" required
+        class="custom-input"></ion-input>
+    </ion-item>
+
+    <ion-item class="custom-input-item">
+      <ion-label position="stacked" class="custom-label">Email</ion-label>
+      <ion-input type="email" placeholder="Enter Email" [(ngModel)]="formData.email" name="email" required
+        class="custom-input"></ion-input>
+    </ion-item>
+
+    <ion-item class="custom-input-item">
+      <ion-label position="stacked" class="custom-label">Phone</ion-label>
+      <ion-input type="text" placeholder="Enter Phone" [(ngModel)]="formData.phone" name="phone" required
+        class="custom-input"></ion-input>
+    </ion-item>
+
+    <ion-item class="custom-input-item">
+      <ion-label position="stacked" class="custom-label">Date Input</ion-label>
+      <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="formData.date" name="date" required
+        class="custom-datetime"></ion-datetime>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" class="custom-button">
+      Print Data
+    </ion-button>
+  </form>
+</ion-content>

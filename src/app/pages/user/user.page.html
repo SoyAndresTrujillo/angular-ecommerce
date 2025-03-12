@@ -1,0 +1,26 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Detalles del Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="avatar-container">
+    <img [src]="profileUrlImage" alt="User Image" class="user-icon" />
+  </div>
+
+  <ion-list>
+    <ng-container *ngFor="let detail of user | keyvalue">
+      <ion-item lines="none">
+        <ion-label position="stacked">{{ detail.key | titlecase }}</ion-label>
+        <ion-text class="item-text">
+          {{ detail.value }}
+        </ion-text>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+  <ion-button expand="block" (click)="goToFormPage()">
+    Go To Form
+  </ion-button>
+
+</ion-content>
