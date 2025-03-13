@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Product } from 'src/app/data/interfaces/products.model';
+import { ProductService } from 'src/app/data/services/product.service';
 
 /**
  * ProductsPage component is responsible for displaying a list of products.
@@ -19,34 +19,24 @@ export class ProductsPage implements OnInit {
    * Constructor to initialize the ProductsPage component.
    * @param http - HttpClient instance for making HTTP requests
    */
-  constructor(private http: HttpClient) {}
+  constructor(private productService: ProductService) {}
 
   /**
    * Lifecycle hook that is called after the component has been initialized.
    * It triggers the fetching of products.
    */
   ngOnInit() {
-    this.getProducts();
-  }
-
-  /**
-   * Fetches the list of products from the Fake Store API.
-   * Notes: The data is then assigned to the products array.
-   */
-  getProducts() {
-    this.http
-      .get<Product[]>('https://fakestoreapi.com/products')
-      .subscribe((data) => {
-        // returning the result of get from the HttpClient in format RxJS
-        this.products = data;
-      });
+    this.productService.getAllProducts().subscribe((data: Product[]) => {
+      this.products = data;
+    });
   }
 
   /**
    * Handles the action when the 'Buy Now' button is clicked.
-   * @param product - The product that the user wants to purchase
+   * @param product - The product that the user wants to purchase.
    */
-  buyNow(product: any) {
-    console.log('Buy Now clicked for:', product.title);
+  handleAddProductToProductsCar(product: Product) {
+    this.productService.addProductToProductsCar(product);
+    console.log(this.productService.getProductsAddedToProductsCar());
   }
 }
