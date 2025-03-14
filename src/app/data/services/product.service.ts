@@ -64,6 +64,6 @@ export class ProductService {
    * @returns The products added to the products card array.
    */
   getProductsAddedToProductsCar(): Product[] {
-    return exampleData;
+    return this.productsAddedToProductsCar;
   }
 }
