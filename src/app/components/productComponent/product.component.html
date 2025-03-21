@@ -21,6 +21,10 @@
           *ngIf="showAddProductButton">
           Add Product
         </ion-button>
+        <ion-button fill="solid" color="primary" (click)="handlePurchaseProduct(product)"
+          *ngIf="showPurchaseProductButton">
+          Purchase
+        </ion-button>
       </div>
     </div>
   </div>
