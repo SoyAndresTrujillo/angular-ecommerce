@@ -8,7 +8,9 @@
   <!-- This component demonstrates Angular's component interaction techniques:
        1. Input Binding: Passing the 'products' array from the parent to the child via [products]="products".
        2. Output/Event Binding: Listening to the 'addProductToProductsCard' event emitted from the child component, which triggers handleAddProductToProductsCard($event).
+       3. Output/Event Binding: Listening to the 'purchaseProduct' event emitted from the child component, which triggers handlePurchaseProduct($event).
   -->
-  <app-product [products]="products" [showAddProductButton]="true"
-    (addProductToProductsCar)="handleAddProductToProductsCar($event)"></app-product>
+  <app-product [products]="products" [showAddProductButton]="true" [showPurchaseProductButton]="true"
+    (addProductToProductsCar)="handleAddProductToProductsCar($event)"
+    (purchaseProduct)="handlePurchaseProduct($event)"></app-product>
 </ion-content>

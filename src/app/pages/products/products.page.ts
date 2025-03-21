@@ -39,4 +39,12 @@ export class ProductsPage implements OnInit {
     this.productService.addProductToProductsCar(product);
     console.log(this.productService.getProductsAddedToProductsCar());
   }
+
+  /**
+   * Handles the action when the 'Purchase' button is clicked.
+   * @param product - The product that the user wants to purchase.
+   */
+  handlePurchaseProduct(product: Product) {
+    console.log({ product });
+  }
 }

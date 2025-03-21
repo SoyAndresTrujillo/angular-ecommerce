@@ -14,8 +14,15 @@ export class ProductComponent implements OnInit {
   // Receive the showAddProductButton from the parent component.
   @Input() showAddProductButton: boolean = true;
 
-  // Emit an event when a product is selected for purchase.
+  // Emit an event when a product is selected for add to cart.
   @Output() addProductToProductsCar: EventEmitter<Product> =
+    new EventEmitter<Product>();
+
+  // Receive the showPurchaseProductButton from the parent component.
+  @Input() showPurchaseProductButton: boolean = true;
+
+  // Emit an event when a product is selected for purchase.
+  @Output() purchaseProduct: EventEmitter<Product> =
     new EventEmitter<Product>();
 
   constructor() {}
@@ -25,5 +32,10 @@ export class ProductComponent implements OnInit {
   // Method called when "Buy Now" is clicked; it emits the event to the parent.
   handleAddProductToProductsCar(product: Product) {
     this.addProductToProductsCar.emit(product);
+  }
+
+  // Method called when "Buy Now" is clicked; it emits the event to the parent.
+  handlePurchaseProduct(product: Product) {
+    this.purchaseProduct.emit(product);
   }
 }
