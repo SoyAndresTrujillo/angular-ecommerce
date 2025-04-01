@@ -66,4 +66,25 @@ export class ProductService {
   getProductsAddedToProductsCar(): Product[] {
     return this.productsAddedToProductsCar;
   }
+
+  /**
+   * The products created array.
+   */
+  private productsCreated: Product[] = [];
+
+  /**
+   * Adds a product to the products created array.
+   * @param product - The product to be added to the products created array.
+   */
+  addProductToProductsCreated(product: Product) {
+    this.productsCreated.push(product);
+  }
+
+  /**
+   * Gets the products created array.
+   * @returns The products created array.
+   */
+  getProductsCreated(): Product[] {
+    return this.productsCreated;
+  }
 }
