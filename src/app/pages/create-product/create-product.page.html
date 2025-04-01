@@ -1,0 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Create Product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Create Product</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <app-form-component (formSubmit)="handleFormSubmit($event)"></app-form-component>
+  <app-product [products]="products" [showAddProductButton]="false" [showPurchaseProductButton]="false"></app-product>
+</ion-content>

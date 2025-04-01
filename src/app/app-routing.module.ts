@@ -31,6 +31,10 @@ const routes: Routes = [
         (m) => m.ProductsCarPageModule
       ),
   },
+  {
+    path: 'create-product',
+    loadChildren: () => import('./pages/create-product/create-product.module').then( m => m.CreateProductPageModule)
+  },
 ];
 
 @NgModule({
