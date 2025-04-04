@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Product } from 'src/app/data/interfaces/products.model';
 import { ProductService } from 'src/app/data/services/product.service';
+import { Subscription } from 'rxjs';
 
 /**
  * ProductsPage component is responsible for displaying a list of products.
@@ -12,8 +13,9 @@ import { ProductService } from 'src/app/data/services/product.service';
   styleUrls: ['./products.page.scss'],
   standalone: false,
 })
-export class ProductsPage implements OnInit {
+export class ProductsPage implements OnInit, OnDestroy {
   products: Product[] = [];
+  private subscription: Subscription = new Subscription();
 
   /**
    * Constructor to initialize the ProductsPage component.
@@ -23,12 +25,26 @@ export class ProductsPage implements OnInit {
 
   /**
    * Lifecycle hook that is called after the component has been initialized.
-   * It triggers the fetching of products.
+   * It triggers the fetching of products and subscribes to product updates.
    */
   ngOnInit() {
-    this.productService.getAllProducts().subscribe((data: Product[]) => {
-      this.products = data;
-    });
+    // Initial load of products
+    this.productService.getAllProducts().subscribe();
+
+    // Subscribe to product updates
+    this.subscription.add(
+      this.productService.products$.subscribe((products) => {
+        this.products = products;
+      })
+    );
+  }
+
+  /**
+   * Lifecycle hook that is called when the component is destroyed.
+   * It unsubscribes from all subscriptions to prevent memory leaks.
+   */
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   /**

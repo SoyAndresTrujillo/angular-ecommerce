@@ -27,6 +27,7 @@ export class CreateProductPage {
    */
   handleFormSubmit(product: Product) {
     this.productService.addProductToProductsCreated(product);
+    this.productService.addProductCreatedToProducts(product);
     this.products = this.productService.getProductsCreated();
   }
 }
