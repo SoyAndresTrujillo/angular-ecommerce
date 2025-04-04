@@ -1,23 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap, BehaviorSubject } from 'rxjs';
 import { Product } from '../interfaces/products.model';
 
 /**
  * ProductService is an Angular service that encapsulates all product-related data operations.
+ * It manages both API-fetched products and user-created products, providing a unified stream
+ * of products to components through RxJS Observables.
  *
- * This service employs Angular's dependency injection to provide HttpClient for making HTTP requests.
- * It leverages RxJS Observables to handle asynchronous data streams from an external API.
+ * Key features:
+ * - Maintains a single source of truth for products using BehaviorSubject
+ * - Combines API products with user-created products
+ * - Provides real-time updates to all subscribed components
+ * - Manages separate lists for created products and shopping cart products
  *
- * Techniques used:
- * - Dependency Injection: The HttpClient is injected via the constructor for ease of testing and maintenance.
- * - Observables: Using RxJS Observables allows for efficient asynchronous HTTP requests and proper handling of data streams,
- *   which is critical in Angular applications.
- *
- * Types and Technical Cases:
- * - Strong Typing: The Product interface is used to ensure that the data obtained from the API matches the expected structure.
- * - API Communication: The service fetches data from the Fake Store API endpoint, a common pattern in RESTful services.
- * - Scalability: By centralizing HTTP operations in a service, it supports separation of concerns and facilitates reuse across multiple components.
+ * RxJS Concepts Used:
+ * - BehaviorSubject: A type of Observable that requires an initial value and stores the "current" value.
+ *   Each new subscriber gets the current value immediately upon subscription.
+ * - Observable: A stream of data that components can subscribe to for updates
+ * - tap: An RxJS operator that performs side effects without affecting the stream
+ * - pipe: An RxJS operator that chains multiple operators together
  */
 @Injectable({
   providedIn: 'root',
@@ -25,6 +27,7 @@ import { Product } from '../interfaces/products.model';
 export class ProductService {
   /**
    * The base URL of the external product API.
+   * This endpoint provides the initial set of products.
    */
   private baseUrl = 'https://fakestoreapi.com/products';
 
@@ -35,54 +38,103 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Fetches all products from the API.
+   * BehaviorSubject to track the current state of all products (API + created).
+   * BehaviorSubject requires an initial value (empty array in this case) and
+   * maintains the "current" value that new subscribers will receive immediately.
+   */
+  private productsSubject = new BehaviorSubject<Product[]>([]);
+
+  /**
+   * Public Observable that components can subscribe to for product updates.
+   * Using asObservable() prevents external code from calling next() on the BehaviorSubject,
+   * maintaining proper encapsulation.
+   */
+  products$ = this.productsSubject.asObservable();
+
+  /**
+   * Stores products created by users separately from API products.
+   * This array persists created products even when the API products are refreshed.
+   */
+  private createdProducts: Product[] = [];
+
+  /**
+   * Fetches all products from the API and combines them with created products.
    *
-   * This method issues a GET request to the defined baseUrl and returns an Observable of an array of Product objects.
-   * Utilizing Observables provides flexibility for handling asynchronous data and potential error cases.
+   * The method uses RxJS operators:
+   * - pipe(): Chains multiple operators together
+   * - tap(): Performs side effects (updating the BehaviorSubject) without affecting the stream
    *
-   * @returns An Observable stream that emits an array of Product objects.
+   * @returns An Observable of Product[] that emits the combined products
    */
   getAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.baseUrl);
+    return this.http.get<Product[]>(this.baseUrl).pipe(
+      tap((apiProducts) => {
+        // Combine API products with created products using spread operator
+        const allProducts = [...apiProducts, ...this.createdProducts];
+        // Update the BehaviorSubject with the combined products
+        this.productsSubject.next(allProducts);
+      })
+    );
   }
 
   /**
-   * The products added to the products card array.
+   * Adds a newly created product to both the created products array and the main products stream.
+   * This ensures the product persists across page reloads and is immediately available to subscribers.
+   *
+   * @param product - The product to be added to the system
+   */
+  addProductCreatedToProducts(product: Product) {
+    // Add to created products array for persistence
+    this.createdProducts.push(product);
+
+    // Get current products and add the new one to the stream
+    const currentProducts = this.productsSubject.getValue();
+    this.productsSubject.next([...currentProducts, product]);
+  }
+
+  /**
+   * Products added to the shopping cart.
+   * This array maintains the current state of the user's shopping cart.
    */
   private productsAddedToProductsCar: Product[] = [];
 
   /**
-   * Adds a product to the products added to the products card array.
-   * @param product - The product to be added to the products card array.
+   * Adds a product to the shopping cart.
+   *
+   * @param product - The product to be added to the shopping cart
    */
   addProductToProductsCar(product: Product) {
     this.productsAddedToProductsCar.push(product);
   }
 
   /**
-   * Gets the products added to the products card array.
-   * @returns The products added to the products card array.
+   * Retrieves all products currently in the shopping cart.
+   *
+   * @returns Array of products in the shopping cart
    */
   getProductsAddedToProductsCar(): Product[] {
     return this.productsAddedToProductsCar;
   }
 
   /**
-   * The products created array.
+   * Array to track products created by the user.
+   * This is separate from the main products stream and shopping cart.
    */
   private productsCreated: Product[] = [];
 
   /**
-   * Adds a product to the products created array.
-   * @param product - The product to be added to the products created array.
+   * Adds a product to the created products tracking array.
+   *
+   * @param product - The product to be added to the created products list
    */
   addProductToProductsCreated(product: Product) {
     this.productsCreated.push(product);
   }
 
   /**
-   * Gets the products created array.
-   * @returns The products created array.
+   * Retrieves all products created by the user.
+   *
+   * @returns Array of user-created products
    */
   getProductsCreated(): Product[] {
     return this.productsCreated;
