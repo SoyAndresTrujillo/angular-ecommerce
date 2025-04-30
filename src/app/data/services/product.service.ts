@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap, BehaviorSubject } from 'rxjs';
+import { Observable, tap, BehaviorSubject, of } from 'rxjs';
 import { Product } from '../interfaces/products.model';
 
 /**
@@ -67,11 +67,14 @@ export class ProductService {
    * @returns An Observable of Product[] that emits the combined products
    */
   getAllProducts(): Observable<Product[]> {
+    const currentProducts = this.productsSubject.getValue();
+    if (currentProducts.length > 0) {
+      return of(currentProducts);
+    }
+
     return this.http.get<Product[]>(this.baseUrl).pipe(
       tap((apiProducts) => {
-        // Combine API products with created products using spread operator
         const allProducts = [...apiProducts, ...this.createdProducts];
-        // Update the BehaviorSubject with the combined products
         this.productsSubject.next(allProducts);
       })
     );
