@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./form.page.scss'],
   standalone: false,
 })
-export class FormPage implements OnInit {
+export class FormPage {
   formData = {
     name: '',
     lastName: '',
@@ -18,9 +18,5 @@ export class FormPage implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {}
-
-  printData() {
-    console.log('Form Data:', this.formData);
-  }
+  printData() {}
 }

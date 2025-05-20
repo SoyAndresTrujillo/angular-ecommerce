@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/data/interfaces/products.model';
 import { ProductService } from 'src/app/data/services/product.service';
 
@@ -8,7 +8,7 @@ import { ProductService } from 'src/app/data/services/product.service';
   styleUrls: ['./create-product.page.scss'],
   standalone: false,
 })
-export class CreateProductPage {
+export class CreateProductPage implements OnInit {
   products: Product[] = [];
 
   /**

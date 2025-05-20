@@ -25,6 +25,9 @@
           *ngIf="showPurchaseProductButton">
           Purchase
         </ion-button>
+        <ion-button fill="solid" color="primary" (click)="handleDeleteProduct(product)" *ngIf="showDeleteProductButton">
+          Delete
+        </ion-button>
       </div>
     </div>
   </div>
