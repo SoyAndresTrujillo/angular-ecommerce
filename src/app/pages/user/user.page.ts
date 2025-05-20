@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user.page.scss'],
   standalone: false,
 })
-export class UserPage implements OnInit {
+export class UserPage {
   profileUrlImage: string =
     'https://s.t13.cl/sites/default/files/styles/manualcrop_1600x800/public/t13/field-imagen/2017-04/1492376426-clarence-2.jpg.jpeg?itok=iNZMaZh5';
 
@@ -25,8 +25,6 @@ export class UserPage implements OnInit {
   show: boolean = true;
 
   constructor(private router: Router) {}
-
-  ngOnInit() {}
 
   goToFormPage() {
     this.router.navigate(['/form']);

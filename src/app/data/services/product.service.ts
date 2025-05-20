@@ -99,7 +99,8 @@ export class ProductService {
    * Products added to the shopping cart.
    * This array maintains the current state of the user's shopping cart.
    */
-  private productsAddedToProductsCar: Product[] = [];
+  private productsAddedToProductsCar = new BehaviorSubject<Product[]>([]);
+  productsAddedToProductsCar$ = this.productsAddedToProductsCar.asObservable();
 
   /**
    * Adds a product to the shopping cart.
@@ -107,7 +108,8 @@ export class ProductService {
    * @param product - The product to be added to the shopping cart
    */
   addProductToProductsCar(product: Product) {
-    this.productsAddedToProductsCar.push(product);
+    const currentProducts = this.productsAddedToProductsCar.getValue();
+    this.productsAddedToProductsCar.next([...currentProducts, product]);
   }
 
   /**
@@ -116,7 +118,7 @@ export class ProductService {
    * @returns Array of products in the shopping cart
    */
   getProductsAddedToProductsCar(): Product[] {
-    return this.productsAddedToProductsCar;
+    return this.productsAddedToProductsCar.getValue();
   }
 
   /**
@@ -141,5 +143,17 @@ export class ProductService {
    */
   getProductsCreated(): Product[] {
     return this.productsCreated;
+  }
+
+  /**
+   * Deletes a product from the shopping cart.
+   *
+   * @param product - The product to be deleted from the shopping cart
+   */
+  deleteProductFromProductsCar(product: Product) {
+    const currentProducts = this.productsAddedToProductsCar.getValue();
+    this.productsAddedToProductsCar.next(
+      currentProducts.filter((p) => p !== product)
+    );
   }
 }
